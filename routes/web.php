@@ -12,6 +12,7 @@
 */
 
 Route::get('/', function () {
-    // echo phpinfo();
+    echo phpinfo();
     return view('welcome');
 });
+Route::get('wx','WxController@wx');
