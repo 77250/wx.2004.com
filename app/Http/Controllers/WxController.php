@@ -27,7 +27,7 @@ class WxController extends Controller
             return false;
         }
     }
-    function wxEvent(){
+    function wxEvent(Request $request){
         $echostr=$request->get('echostr');
 
         $signature = $_GET["signature"];
@@ -46,7 +46,7 @@ class WxController extends Controller
             //记录日志
             file_put_contents('wx_event.log',$xml_data);
             //把xml文本转化为数组对象
-            $data=simplexml_load_file($xml_data,'SimpleXMLElement',LIBXML_NOCDATA);
+            $data=simplexml_load_string($xml_data,'SimpleXMLElement',LIBXML_NOCDATA);
             $xml="<xml>
                 <ToUserName><![CDATA[toUser]]></ToUserName>
                 <FromUserName><![CDATA[fromUser]]></FromUserName>
