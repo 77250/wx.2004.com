@@ -15,7 +15,7 @@ Route::get('/', function () {
     echo phpinfo();
     return view('welcome');
 });
-Route::get('/wx','WxController@wx');
+// Route::get('/wx','WxController@wx');
 Route::get('wx/token','WxController@getAccessToken');
 Route::post('/wx','WxController@wxEvent');
 
