@@ -50,6 +50,7 @@ class WxController extends Controller
             if($data->MsgType=='event'){
                 if($data->Event=='subscride'){
                     $Content = "欢迎关注";
+                file_put_contents('wx_event.log',$Content);
                     $result = $this->infocodl($data,$Content);
                     return $result;
                 }
