@@ -46,15 +46,15 @@ class WxController extends Controller
             //记录日志
             file_put_contents('wx_event.log',$xml_data);
             //把xml文本转化为数组对象
-            $data=simplexml_load_string($xml_data,'SimpleXMLElement',LIBXML_NOCDATA);
-            $xml="<xml>
-                <ToUserName><![CDATA[toUser]]></ToUserName>
-                <FromUserName><![CDATA[fromUser]]></FromUserName>
-                <CreateTime>1348831860</CreateTime>
-                <MsgType><![CDATA[text]]></MsgType>
-                <Content><![CDATA[this is a test]]></Content>
-                <MsgId>1234567890123456</MsgId>
-            </xml>";
+            $data = simplexml_load_string($xml_data);
+            if($data->MsgType=='event'){
+                if($data->Event=='subscride'){
+                    $Content = "欢迎关注";
+                    $result = $this->infocodl($data,$Content);
+                    return $result;
+                }
+            }
+       
         }else{
            echo "";
         }
@@ -83,4 +83,21 @@ class WxController extends Controller
         
         echo "access_token: ".$token;
     }
+   //封装回复方法
+   public function infocodl($postarray,$Content){
+    $ToUserName=$postarray->FromUserName;//接收对方帐号
+    $FromUserName=$postarray->ToUserName;//接收开发者微信
+    file_put_contents('log.lpgs',$ToUserName);
+
+    $time=time();//接收时间
+    $text='text';//数据类型
+    $ret="<xml>
+        <ToUserName><![CDATA[%s]]></ToUserName>
+        <FromUserName><![CDATA[%s]]></FromUserName>
+        <CreateTime>%s</CreateTime>
+        <MsgType><![CDATA[%s]]></MsgType>
+        <Content><![CDATA[%s]]></Content>
+    </xml>";
+    echo spintf($ret,$ToUserName,$FromUserName,$time,$text,$Content);
+   }
 }
