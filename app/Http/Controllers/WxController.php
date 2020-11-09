@@ -6,15 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 class WxController extends Controller
 {
-    //
-    public function wx(Request $request){
-
-        if( $tmpStr == $signature ){
-            echo $echostr;
-        }else{
-            return false;
-        }
-    }
     function wxEvent(Request $request){
         $echostr=$request->get('echostr');
 
@@ -27,12 +18,11 @@ class WxController extends Controller
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
-        
-        if(!empty($echostr)){
-            echo $echostr;
-        }
 
         if( $tmpStr == $signature ){
+            if(!empty($echostr)){
+                echo $echostr;
+            }
             //接收数据
             $xml_data=file_get_contents('php://input');
             //记录日志
@@ -40,9 +30,9 @@ class WxController extends Controller
             //把xml文本转化为数组对象
             $data = simplexml_load_string($xml_data);
             if($data->MsgType=='event'){
-                if($data->Event=='subscride'){
+                if($data->Event=='subscribe'){
                     $Content = "欢迎关注";
-                file_put_contents('wx_event.log',$Content);
+                    file_put_contents('wx_event.log',$Content);
                     $result = $this->infocodl($data,$Content);
                     return $result;
                 }
