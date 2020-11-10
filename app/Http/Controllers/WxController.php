@@ -58,7 +58,7 @@ class IndexController extends Controller
                                     "subscribe_scene" => $user["subscribe_scene"]
                                 ];
                                 UserModel::create($data);
-                                $content = "欢迎关注";
+                                $content = "欢迎关注。。。";
                             }
                         }
                     }
