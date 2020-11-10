@@ -31,7 +31,7 @@ class WxController extends Controller
             $data = simplexml_load_string($xml_data);
             if($data->MsgType=='event'){
                 if($data->Event=='subscribe'){
-                    $Content = "欢迎关注";
+                    $Content = "欢迎关注xx";
                     file_put_contents('wx_event.log',$Content);
                     $result = $this->infocodl($data,$Content);
                     return $result;
