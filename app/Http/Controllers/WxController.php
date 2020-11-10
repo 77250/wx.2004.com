@@ -99,5 +99,5 @@ class WxController extends Controller
                 $content .="日期:".$v['week']."当日温度:".$v['wtTemp']."天气:".$v['wtNm']."风向:".$v['wtWindNm'];
        }
        return $content;
-   }
+   } 
 }
