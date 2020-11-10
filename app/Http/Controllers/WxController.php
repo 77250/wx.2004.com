@@ -37,7 +37,12 @@ class WxController extends Controller
                     return $result;
                 }
             }
-       
+            //回复天气
+            $arr = ['天气','天气。','天气,'];
+            if($data->Content==$arr[array_rand($arr)]){
+                $Content = $this->getweather();
+                $result = $this->infocodl($data,$Content);
+            }
         }else{
            echo "";
         }
@@ -82,5 +87,17 @@ class WxController extends Controller
         <Content><![CDATA[%s]]></Content>
     </xml>";
     echo sprintf($ret,$ToUserName,$FromUserName,$time,$text,$Content);
+   }
+   //封装天气方法
+   public function getweather(){
+       $url = ' http://api.k780.com/?app=weather.realtime&weaid=1&ag=today,futureDay,lifeIndex,futureHour&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json';
+       $weathle = file_get_contents($rul);
+       $weathle = json_decode($weathle,true);
+       if($weathle['success']){
+           $content = '';
+           $v = $weathle['result']['realTime'];
+                $content .="日期:".$v['week']."当日温度:".$v['wtTemp']."天气:".$v['wtNm']."风向:".$v['wtWindNm'];
+       }
+       return $content;
    }
 }
