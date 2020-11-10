@@ -42,7 +42,9 @@ class WxController extends Controller
             if($data->Content==$arr[array_rand($arr)]){
                 $Content = $this->getweather();
                 $result = $this->infocodl($data,$Content);
+                return $result;
             }
+            echo "";
         }else{
            echo "";
         }
