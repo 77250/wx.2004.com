@@ -71,7 +71,7 @@ class WxController extends Controller
         Redis::set($key,$token);
         Redis::expire($key,3600);
         
-        echo "access_token: ".$token;
+        return $token;
     }
    //封装回复方法
    public function infocodl($postarray,$Content){
@@ -101,5 +101,50 @@ class WxController extends Controller
                 $content .="日期:".$v['week']."当日温度:".$v['wtTemp']."天气:".$v['wtNm']."风向:".$v['wtWindNm'];
        }
        return $content;
-   } 
+   }
+   public function curl($url,$menu){
+    //1.初始化kil
+
+        $ch = curl_init();
+        //2.设置
+        curl_setopt($ch,CURLOPT_URL,$url);//设置提交地址
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,TRUE);//设置返回值返回字符串
+        curl_setopt($ch,CURLOPT_POST,1);//post提交方式
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$menu);//上传的文件
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);//过滤https协议
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);//过滤https协议
+        //3.执行
+        $output = curl_exec($ch);
+        //关闭
+        curl_close($ch);
+        return $output;
+   }
+  public function createMenu(){
+      $menu= ' {
+        "button":[
+        {	
+             "type":"click",
+             "name":"今日歌曲",
+             "key":"V1001_TODAY_MUSIC"
+         },
+         {
+              "name":"菜单",
+              "sub_button":[
+              {	
+                  "type":"view",
+                  "name":"搜索",
+                  "url":"http://www.soso.com/"
+               },
+               {
+                  "type":"click",
+                  "name":"赞一下我们",
+                  "key":"V1001_GOOD"
+               }]
+          }]
+    }';
+    $access_token = $this->getAccessToken();
+    $url ="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
+    $res = $this->curl($url,$menu);
+    dd($res);
+  }
 }
