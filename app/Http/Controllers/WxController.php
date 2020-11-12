@@ -34,7 +34,7 @@ class WxController extends Controller
                     //openid写入库里
                     $ToUserName=$data->FromUserName;//接收对方账号
                     //if判断
-                    $u=WxModel::where('openid',$ToUserName)->first();
+                    $u=WxModel::where(['openid'=>$ToUserName])->first();
                     if($u){
                         $Content = "欢迎回来";
                         $result = $this->infocodl($data,$Content);
