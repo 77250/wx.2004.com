@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use App\Model\WxModel;
 class WxController extends Controller
 {
     function wxEvent(Request $request){
-        $echostr=$request->get('echostr');
 
-        $signature = $_GET["signature"];
-        $timestamp = $_GET["timestamp"];
-        $nonce = $_GET["nonce"];
+        $signature = request()->get("signature");
+        $timestamp = request()->get("timestamp");
+        $nonce = request()->get("nonce");
         
         $token = env('WX_TOKEN');
         $tmpArr = array($token, $timestamp, $nonce);
@@ -31,12 +31,37 @@ class WxController extends Controller
             $data = simplexml_load_string($xml_data);
             if($data->MsgType=='event'){
                 if($data->Event=='subscribe'){
-                    $Content = "欢迎关注xx";
-                    file_put_contents('wx_event.log',$Content);
-                    $result = $this->infocodl($data,$Content);
-                    return $result;
+                    //openid写入库里
+                    $ToUserName = $data('openid',$ToUserName)->first();
+                    if($u){
+                        $Content = "欢迎回来";
+                        $result = $this->infocodl($data,$Content);
+                        return $result;
+                    }
+                    $token=$this->getAccessToken();
+                        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
+                        //   dd($url);
+                        $file=file_get_contents($url);
+                        $decode=json_decode($file,true);
+                        //   dd($decode);
+                        $data = [
+                            'nickname'=>$decode['nickname'],
+                            'sex'=>$decode['sex'],
+                            'country'=>$decode['country'],
+                            'headimgurl'=>$decode['headimgurl'],
+                            'add_time'=>$decode['subscribe_time'],
+                            'openid'=>$decode['openid']
+                        ];
+                        // dd($data);
+                        $openid = new WxModel();
+                        // dd($openid);
+                        $Content = "欢迎关注xx";
+                        file_put_contents('wx_event.log',$Content);
+                        $result = $this->infocodl($data,$Content);
+                        return $result;
+                    }
                 }
-            }
+            
             //回复天气
             $arr = ['天气','天气。','天气,'];
             if($data->Content==$arr[array_rand($arr)]){
@@ -62,7 +87,7 @@ class WxController extends Controller
         $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPEC')."";
         // echo $url;die;
         $response = file_get_contents($url);
-        echo $response;
+        // echo $response;
         $data = json_decode($response,true);
         $token = $data['access_token'];
         
@@ -119,13 +144,14 @@ class WxController extends Controller
         curl_close($ch);
         return $output;
    }
+   //自定义菜单
   public function createMenu(){
       $menu= ' {
         "button":[
         {	
              "type":"click",
-             "name":"今日歌曲",
-             "key":"V1001_TODAY_MUSIC"
+             "name":"商城",
+             "url":"http://www.soso.com/"
          },
          {
               "name":"菜单",
@@ -146,5 +172,10 @@ class WxController extends Controller
     $url ="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
     $res = $this->curl($url,$menu);
     dd($res);
+  }
+  //下载媒体素材
+  public function diMedia(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    $media_id = 'U3YUYonuHyx4Uv2mNCB_EZpySyYd12aLpeFAF2djAQGzWcKgRF_yUXTbznSKguyh';
+    $url = '';
   }
 }
