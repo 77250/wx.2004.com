@@ -32,7 +32,9 @@ class WxController extends Controller
             if($data->MsgType=='event'){
                 if($data->Event=='subscribe'){
                     //openid写入库里
-                    $ToUserName = $data('openid',$ToUserName)->first();
+                    $ToUserName=$obj->FromUserName;//接收对方账号
+                    //if判断
+                    $u=Openname::where('openid',$ToUserName)->first();
                     if($u){
                         $Content = "欢迎回来";
                         $result = $this->infocodl($data,$Content);
