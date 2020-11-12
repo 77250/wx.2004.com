@@ -46,7 +46,7 @@ class WxController extends Controller
                         $file=file_get_contents($url);
                         $decode=json_decode($file,true);
                         //   dd($decode);
-                        $data = [
+                        $datas = [
                             'nickname'=>$decode['nickname'],
                             'sex'=>$decode['sex'],
                             'country'=>$decode['country'],
@@ -101,9 +101,11 @@ class WxController extends Controller
         return $token;
     }
    //封装回复方法
-   public function infocodl($postarray,$Content){
-    $ToUserName=$postarray->FromUserName;//接收对方帐号
-    $FromUserName=$postarray->ToUserName;//接收开发者微信
+   public function infocodl($data,$Content){
+    //    dd($data);
+    $ToUserName=$data['FromUserName'];//接收对方帐号
+    
+    $FromUserName=$data['ToUserName'];//接收开发者微信
     file_put_contents('log.lpgs',$ToUserName);
 
     $time=time();//接收时间
