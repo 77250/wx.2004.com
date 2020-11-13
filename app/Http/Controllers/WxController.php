@@ -65,7 +65,7 @@ class WxController extends Controller
                         //调用天气
                          $Content = $this->getweather();
                 $result = $this->infocodl($data,$Content);
-                return $result;
+                // return $result;
                     }
                 }
             }
@@ -184,6 +184,7 @@ class WxController extends Controller
     file_get_contents('user_wetch',$data);//存文件
     $wetch = file_get_contents($data);
     $json = json_decode($wetch,true);
-    $data =
+
   }
 }
+
