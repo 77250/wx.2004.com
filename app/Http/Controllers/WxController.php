@@ -30,7 +30,6 @@ class WxController extends Controller
             $ToUserName=$data['ToUserName'];//接收对方帐号
             // dd($data);
             //记录日志
-            file_put_contents('wx_event.log',$xml_data,FILE_APPEND);
             
             if($data->MsgType == 'event'){
                 if($data->Event=="subscribe"){
