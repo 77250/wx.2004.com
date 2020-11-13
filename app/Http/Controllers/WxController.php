@@ -27,49 +27,57 @@ class WxController extends Controller
             $xml_data=file_get_contents('php://input');
              //把xml文本转化为数组对象
             $data = simplexml_load_string($xml_data);
-            $ToUserName=$data['ToUserName'];//接收对方帐号
-            // dd($data);
+
             //记录日志
+            file_put_contents('wx_event.log',$xml_data,FILE_APPEND);
+           
             
-            if($data->MsgType == 'event'){
-                if($data->Event=="subscribe"){
-                    $arr = WxModel::where('openid',$ToUserName)->first();
-                    if(is_object($arr)){
-                        $arr = $arr->toAeeay();
-                    }
-                    if(!empty($arr)){
-                        $content = "欢迎回来哟";
+            if($data->MsgType=='event'){
+                if($data->Event=='subscribe'){
+                    //openid写入库里
+                    $ToUserName=$data->FromUserName;//接收对方账号
+                    //if判断
+                    $u=WxModel::where(['openid'=>$ToUserName])->first();
+                    if($u){
+                        $Content = "欢迎回来";
+                        $result = $this->infocodl($data,$Content);
+                        return $result;
                     }else{
-                        $array = ['你大爷'];
-                        $content = $array[array_rand($array)];
-                        $token = $this->getAccessToken();
-                        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $token . "&openid=" . $toUser . "&lang=zh_CN';
-                        file_put_contents('user_wetch',$data);//存文件
-                        $wetch = file_get_contents($data);
-                        $json = json_decode($wetch,true);
+                        $token=$this->getAccessToken();
+                        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
+                        //   dd($url);
+                        $file=file_get_contents($url);
+                        $decode=json_decode($file,true);
+                        //   dd($decode);
                         $datas = [
-                            'openid'=>$toUser,
-                            'nickname'=>$json['nickname'],
-                            'sex'=>$json['sex'],
-                            'country'=>$json['country'],
-                            'headimgurl'=>$json['headimgurl'],
-                            'add_time'=>$json['subscribe_time']
+                            'nickname'=>$decode['nickname'],
+                            'sex'=>$decode['sex'],
+                            'country'=>$decode['country'],
+                            'headimgurl'=>$decode['headimgurl'],
+                            'add_time'=>$decode['subscribe_time'],
+                            'openid'=>$decode['openid']
                         ];
-                        $weathle = WxModel::insert($datas);
+                        // dd($data);
+                        $openid = new WxModel();
+                        // dd($openid);
+                        $user_insert=$openid->insertGetId($datas);
+                        $Content = "欢迎关注xx";
+        
+                        $result = $this->infocodl($data,$Content);
+                        return $result;
                     }
-                    $this->text($data,$content);
-                }
-                if($data->getweather == 'CLICK'){
-                    if($data->EventKey == 'weather'){
-                        //调用天气
-                         $Content = $this->getweather();
-                $result = $this->infocodl($data,$Content);
-                // return $result;
-                    }
-                }
-            }
             
-         
+                    }
+                   
+                }
+            
+            //回复天气
+            $arr = ['天气','天气。','天气,'];
+            if($data->Content==$arr[array_rand($arr)]){
+                $Content = $this->getweather();
+                $result = $this->infocodl($data,$Content);
+                return $result;
+            }
             echo "";
         }else{
            echo "";
@@ -102,9 +110,9 @@ class WxController extends Controller
    //封装回复方法
    public function infocodl($data,$Content){
     //    dd($data);
-    $ToUserName=$data['ToUserName'];//接收对方帐号
+    $ToUserName=$data['FromUserName'];//接收对方帐号
     
-    $FromUserName=$data['FromUserName'];//接收开发者微信
+    $FromUserName=$data['ToUserName'];//接收开发者微信
     file_put_contents('log.lpgs',$ToUserName);
 
     $time=time();//接收时间
@@ -116,7 +124,7 @@ class WxController extends Controller
         <MsgType><![CDATA[%s]]></MsgType>
         <Content><![CDATA[%s]]></Content>
     </xml>";
-    return  sprintf($ret,$ToUserName,$FromUserName,$time,$text,$Content);
+    echo sprintf($ret,$ToUserName,$FromUserName,$time,$text,$Content);
    }
    //封装天气方法
    public function getweather(){
@@ -179,11 +187,6 @@ class WxController extends Controller
   //下载媒体素材
   public function diMedia(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     $media_id = 'U3YUYonuHyx4Uv2mNCB_EZpySyYd12aLpeFAF2djAQGzWcKgRF_yUXTbznSKguyh';
-    $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
-    file_get_contents('user_wetch',$data);//存文件
-    $wetch = file_get_contents($data);
-    $json = json_decode($wetch,true);
-
+    $url = '';
   }
 }
-
