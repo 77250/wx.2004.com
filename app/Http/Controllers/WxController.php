@@ -110,9 +110,9 @@ class WxController extends Controller
    //封装回复方法
    public function infocodl($data,$Content){
     //    dd($data);
-    $ToUserName=$data['FromUserName'];//接收对方帐号
+    $ToUserName=$data->FromUserName;//接收对方帐号
     
-    $FromUserName=$data['ToUserName'];//接收开发者微信
+    $FromUserName=$data->ToUserName;//接收开发者微信
     file_put_contents('log.lpgs',$ToUserName);
 
     $time=time();//接收时间
