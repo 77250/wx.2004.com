@@ -38,7 +38,7 @@ class WxController extends Controller
                     if($u){
                         $Content = "欢迎回来";
                         $result = $this->infocodl($data,$Content);
-                        return $result;
+                        echo $result;
                     }
                     $token=$this->getAccessToken();
                         $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
@@ -60,7 +60,7 @@ class WxController extends Controller
                         $Content = "欢迎关注xx";
                         file_put_contents('wx_event.log',$Content);
                         $result = $this->infocodl($data,$Content);
-                        return $result;
+                        echo $result;
                     }
                 }
             
