@@ -60,9 +60,11 @@ class WxController extends Controller
                         // dd($data);
                         $openid = new WxModel();
                         // dd($openid);
+                        $user_insert=$openid->insertGetId($datas);
                         $Content = "欢迎关注xx";
         
-                         echo $this->infocodl($data,$Content);
+                        $result = $this->infocodl($data,$Content);
+                        return $result;
                     }
             
                     }
