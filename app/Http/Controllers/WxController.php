@@ -25,7 +25,6 @@ class WxController extends Controller
             }
             //接收数据
             $xml_data=file_get_contents('php://input');
-
              //把xml文本转化为数组对象
             $data = simplexml_load_string($xml_data);
 
@@ -42,9 +41,9 @@ class WxController extends Controller
                     if($u){
                         $Content = "欢迎回来";
                         $result = $this->infocodl($data,$Content);
-                        echo $result;
-                    }
-                    $token=$this->getAccessToken();
+                        return $result;
+                    }else{
+                        $token=$this->getAccessToken();
                         $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
                         //   dd($url);
                         $file=file_get_contents($url);
@@ -66,6 +65,8 @@ class WxController extends Controller
                          echo $this->infocodl($data,$Content);
                     }
             
+                    }
+                   
                 }
             
             //回复天气
