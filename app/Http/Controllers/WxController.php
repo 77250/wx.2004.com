@@ -25,10 +25,14 @@ class WxController extends Controller
             }
             //接收数据
             $xml_data=file_get_contents('php://input');
-            //记录日志
-            file_put_contents('wx_event.log',$xml_data);
-            //把xml文本转化为数组对象
+
+             //把xml文本转化为数组对象
             $data = simplexml_load_string($xml_data);
+
+            //记录日志
+            file_put_contents('wx_event.log',$xml_data,FILE_APPEND);
+           
+            
             if($data->MsgType=='event'){
                 if($data->Event=='subscribe'){
                     //openid写入库里
