@@ -43,7 +43,7 @@ class WxController extends Controller
                         $array = ['你大爷'];
                         $content = $array[array_rand($array)];
                         $token = $this->getAccessToken();
-                        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
+                        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $token . "&openid=" . $toUser . "&lang=zh_CN';
                         file_put_contents('user_wetch',$data);//存文件
                         $wetch = file_get_contents($data);
                         $json = json_decode($wetch,true);
