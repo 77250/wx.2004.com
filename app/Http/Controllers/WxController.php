@@ -63,9 +63,9 @@ class WxController extends Controller
                         // dd($openid);
                         $Content = "欢迎关注xx";
         
-                        $result = $this->infocodl($data,$Content);
-                        echo $result;
+                         echo $this->infocodl($data,$Content);
                     }
+            
                 }
             
             //回复天气
