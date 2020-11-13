@@ -62,7 +62,7 @@ class WxController extends Controller
                         $openid = new WxModel();
                         // dd($openid);
                         $Content = "欢迎关注xx";
-                        file_put_contents('wx_event.log',$Content);
+        
                         $result = $this->infocodl($data,$Content);
                         echo $result;
                     }
