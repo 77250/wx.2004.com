@@ -22,3 +22,11 @@ Route::get('wx/getweather','WxController@getweather');
 Route::get('wx/createMenu','WxController@createMenu');
 Route::get('wx/wxEvent','WxController@wxEvent');
 
+
+
+//小程序接口
+// Route::prefix('/api')->group(function(){
+    Route::get('/goods','xcx\ApiController@goods');   
+    Route::get('/wxlogin','xcx\ApiController@wxlogin'); 
+    Route::get('/wxgoods','xcx\ApiController@wxgoods'); 
+// });
