@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 // Route::get('/wx','WxController@wx');
 Route::get('wx/token','WxController@getAccessToken');
-Route::post('/wx','WxController@wxEvent');
+Route::post('/wx','WxController@wxEvent');    
 Route::get('wx/getweather','WxController@getweather');
 Route::get('wx/createMenu','WxController@createMenu');
 Route::get('wx/wxEvent','WxController@wxEvent');
