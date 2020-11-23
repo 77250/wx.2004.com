@@ -25,6 +25,7 @@ class ApiController extends Controller
     public function wxlogin(){
         // echo "123";
         $code=request()->get("code");
+        // return $code;
         // dd($code);
         $appid = "wxa5b35780c36238a1";
         $appSecret = "db4bbc47081ccf49cb75b4c212d01178";
@@ -54,8 +55,16 @@ class ApiController extends Controller
         }
     }
     public function wxgoods(){
-        $goods = GoodsModel::inRandomOrder()->take('2')->get()->toArray();
+        $goods = GoodsModel::inRandomOrder()->take('5')->get()->toArray();
         // dd($goods);
         return json_encode($goods,256);
+    }
+    public function datails(){
+        $goods_id = request()->get('goods_id');
+        // dd($goods_id);
+        $detail = GoodsModel::where('goods_id',$goods_id)->first()->toArray();
+        // dd($datail);
+        return $detail;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     }
 }

@@ -29,4 +29,5 @@ Route::get('wx/wxEvent','WxController@wxEvent');
     Route::get('/goods','xcx\ApiController@goods');   
     Route::get('/wxlogin','xcx\ApiController@wxlogin'); 
     Route::get('/wxgoods','xcx\ApiController@wxgoods'); 
+    Route::get('/datails','xcx\ApiController@datails'); 
 // });
