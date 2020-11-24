@@ -56,7 +56,7 @@ class ApiController extends Controller
     }
     public function wxgoods(){
         $goods = GoodsModel::inRandomOrder()->take('5')->get()->toArray();
-        // dd($goods);
+        dd($goods);
         return json_encode($goods,256);
     }
     public function datails(){
