@@ -13,7 +13,7 @@ class ApiController extends Controller
     //
     public function goods(){
 
-        // dump($_GET);
+        dump($_GET);
    
         $data=[
             "name"=>"水电费",
@@ -29,7 +29,7 @@ class ApiController extends Controller
         // dd($code);
         $appid = "wxa5b35780c36238a1";
         $appSecret = "db4bbc47081ccf49cb75b4c212d01178";
-        $url = "https://api.weixin.qq.com/sns/jscode2session?appid=".$appid."&secret=".$appSecret."&js_code=".$code."&grant_type=authorization_code";
+        $url = "https://api.weixin.qq.com/sns/jscode2ession?appid=".$appid."&secret=".$appSecret."&js_code=".$code."&grant_type=authorization_code";
         $res = json_decode(file_get_contents($url),true);
         if(isset($res['errorde'])){
             $data = [
@@ -50,13 +50,13 @@ class ApiController extends Controller
                 'data'=>[
                     'token'=>$token
                 ]
-            ];
+    ];
             return $data;
         }
     }
     public function wxgoods(){
         $goods = GoodsModel::inRandomOrder()->take('5')->get()->toArray();
-        dd($goods);
+        // dd($goods);
         return json_encode($goods,256);
     }
     public function datails(){
@@ -67,4 +67,41 @@ class ApiController extends Controller
         return $detail;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     }
+    // 添加购物车
+    public function addCart(Request $request)
+    {
+        $goods_id = $request->post('goods_id');
+        $uid = $_SERVER['uid'];
+
+        //查询商品的价格
+        $price = GoodsModel::find($goods_id)->shop_price;
+
+        //将商品存储购物车表 或 Redis
+        $info = [
+            'goods_id'  => $goods_id,
+            'uid'       => $uid,
+            'goods_num' => 1,
+            'add_time'  => time(),
+            'cart_price' => $price
+        ];
+
+        $id = CartModel::insertGetId($info);
+        if($id)
+        {
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok'
+            ];
+        }else{
+            $response = [
+                'errno' => 50002,
+                'msg'   => '加入购物车失败'
+            ];
+        }
+
+        return $response;
+    }
 }
+
+
+

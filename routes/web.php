@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    // echo phpinfo();
+    echo phpinfo();
     return view('welcome');
 });
 // Route::get('/wx','WxController@wx');
@@ -30,4 +30,5 @@ Route::get('wx/wxEvent','WxController@wxEvent');
     Route::get('/wxlogin','xcx\ApiController@wxlogin'); 
     Route::get('/wxgoods','xcx\ApiController@wxgoods'); 
     Route::get('/datails','xcx\ApiController@datails'); 
+    Route::get('/addCart','xcx\ApiController@addCart');
 // });

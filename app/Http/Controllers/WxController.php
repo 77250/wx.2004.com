@@ -30,46 +30,6 @@ class WxController extends Controller
 
             //记录日志
             file_put_contents('wx_event.log',$xml_data,FILE_APPEND);
-           
-            
-            if($data->MsgType=='event'){
-                if($data->Event=='subscribe'){
-                    //openid写入库里
-                    $ToUserName=$data->FromUserName;//接收对方账号
-                    //if判断
-                    $u=WxModel::where(['openid'=>$ToUserName])->first();
-                    if($u){
-                        $Content = "欢迎回来";
-                        $result = $this->infocodl($data,$Content);
-                        return $result;
-                    }else{
-                        $token=$this->getAccessToken();
-                        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$token.'&openid=ovgu16IbL9fRTw8QCbRQBClwQK3o&lang=zh_CN';
-                        //   dd($url);
-                        $file=file_get_contents($url);
-                        $decode=json_decode($file,true);
-                        //   dd($decode);
-                        $datas = [
-                            'nickname'=>$decode['nickname'],
-                            'sex'=>$decode['sex'],
-                            'country'=>$decode['country'],
-                            'headimgurl'=>$decode['headimgurl'],
-                            'add_time'=>$decode['subscribe_time'],
-                            'openid'=>$decode['openid']
-                        ];
-                        // dd($data);
-                        $openid = new WxModel();
-                        // dd($openid);
-                        $user_insert=$openid->insertGetId($datas);
-                        $Content = "欢迎关注xx";
-        
-                        $result = $this->infocodl($data,$Content);
-                        return $result;
-                    }
-            
-                    }
-                   
-                }
             
             //回复天气
             $arr = ['天气','天气。','天气,'];
