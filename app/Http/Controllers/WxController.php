@@ -121,7 +121,7 @@ class WxController extends Controller
         "button":[
         {	
              "type":"click",
-             "name":"商城",
+             "name":"商城1111",
              "url":"http://www.soso.com/"
          },
          {
